@@ -13,7 +13,7 @@ defmodule GildedRose do
         if item.quality > 0 do
           if item.name != "Sulfuras, Hand of Ragnaros" do
             if item.name == "Conjured Item" do
-              %{item | quality: item.quality - 2}
+              %{item | quality: max(0, item.quality - 2)}
             else
               %{item | quality: item.quality - 1}
             end
@@ -68,7 +68,7 @@ defmodule GildedRose do
                     cond do
                       item.name != "Sulfuras, Hand of Ragnaros" ->
                         if item.name == "Conjured Item" do
-                          %{item | quality: item.quality - 2}
+                          %{item | quality: max(0, item.quality - 2)}
                         else
                           %{item | quality: item.quality - 1}
                         end
