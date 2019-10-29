@@ -70,6 +70,17 @@ defmodule GildedRoseTest do
     end
 
     test "some conjured item" do
+      assert GildedRose.update_quality([
+        %Item{name: "Conjured Staff", quality: 48, sell_in: 9}
+      ]) == [
+        %Item{name: "Conjured Staff", quality: 46, sell_in: 8}
+      ]
+
+      assert GildedRose.update_quality([
+        %Item{name: "Conjured Staff", quality: 30, sell_in: 0}
+      ]) == [
+        %Item{name: "Conjured Staff", quality: 26, sell_in: -1}
+      ]
     end
   end
 end
