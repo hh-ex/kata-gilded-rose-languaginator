@@ -77,6 +77,18 @@ defmodule GildedRoseTest do
     end
 
     test "some conjured item" do
+      assert GildedRose.update_quality([
+        %Item{name: "Conjured Staff", quality: 48, sell_in: 9}
+      ]) == [
+        %Item{name: "Conjured Staff", quality: 46, sell_in: 8}
+      ]
+
+      assert GildedRose.update_quality([
+        %Item{name: "Conjured Staff", quality: 30, sell_in: 0}
+      ]) == [
+        %Item{name: "Conjured Staff", quality: 26, sell_in: -1}
+      ]
+
       test_update("Conjured Item", %{q: [50, 48], s: [9, 8]})
       test_update("Conjured Item", %{q: [11, 9], s: [11, 10]})
       test_update("Conjured Item", %{q: [10, 8], s: [10, 9]})
