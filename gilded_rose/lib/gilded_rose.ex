@@ -7,12 +7,24 @@ defmodule GildedRose do
     Enum.map(items, &update_item/1)
   end
 
+  def decrease_quality(item, n) do
+    %{item | quality: item.quality - n}
+  end
+
+  def increase_quality(item, n) do
+    %{item | quality: item.quality + n}
+  end
+
+  def decrease_sell_in(item, n) do
+    %{item | sell_in: item.sell_in - n}
+  end
+
   def update_item(item) do
     item =
       cond do
         item.name == "Conjured Item" ->
           if item.quality > 0 do
-            %{item | quality: item.quality - 2}
+            decrease_quality(item, 2)
           else
             item
           end
@@ -20,7 +32,7 @@ defmodule GildedRose do
         item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" ->
           if item.quality > 0 do
             if item.name != "Sulfuras, Hand of Ragnaros" do
-              %{item | quality: item.quality - 1}
+              decrease_quality(item, 1)
             else
               item
             end
@@ -31,7 +43,7 @@ defmodule GildedRose do
         true ->
           cond do
             item.quality < 50 ->
-              item = %{item | quality: item.quality + 1}
+              item = increase_quality(item, 1)
 
               cond do
                 item.name == "Backstage passes to a TAFKAL80ETC concert" ->
@@ -40,7 +52,7 @@ defmodule GildedRose do
                       item.sell_in < 11 ->
                         cond do
                           item.quality < 50 ->
-                            %{item | quality: item.quality + 1}
+                            increase_quality(item, 1)
 
                           true ->
                             item
@@ -54,7 +66,7 @@ defmodule GildedRose do
                     item.sell_in < 6 ->
                       cond do
                         item.quality < 50 ->
-                          %{item | quality: item.quality + 1}
+                          increase_quality(item, 1)
 
                         true ->
                           item
@@ -76,7 +88,7 @@ defmodule GildedRose do
     item =
       cond do
         item.name != "Sulfuras, Hand of Ragnaros" ->
-          %{item | sell_in: item.sell_in - 1}
+          decrease_sell_in(item, 1)
 
         true ->
           item
@@ -92,7 +104,7 @@ defmodule GildedRose do
                   item.quality > 0 ->
                     cond do
                       item.name != "Sulfuras, Hand of Ragnaros" ->
-                        %{item | quality: item.quality - 1}
+                        decrease_quality(item, 1)
 
                       true ->
                         item
@@ -109,7 +121,7 @@ defmodule GildedRose do
           true ->
             cond do
               item.quality < 50 ->
-                %{item | quality: item.quality + 1}
+                increase_quality(item, 1)
 
               true ->
                 item
