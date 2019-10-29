@@ -10,37 +10,22 @@ defmodule GildedRose do
   def update_item(item) do
     item = cond do
       item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" ->
-        if item.quality > 0 do
-          if item.name != "Sulfuras, Hand of Ragnaros" do
-            %{item | quality: item.quality - 1}
-          else
-            item
-          end
-        else
-          item
-        end
+        # default item
+        change_quality(item, -1)
       true ->
         cond do
           item.quality < 50 ->
-            item = %{item | quality: item.quality + 1}
+            item = change_quality(item, +1)
             cond do
               item.name == "Backstage passes to a TAFKAL80ETC concert" ->
                 item = cond do
                   item.sell_in < 11 ->
-                    cond do
-                      item.quality < 50 ->
-                        %{item | quality: item.quality + 1}
-                      true -> item
-                    end
+                        change_quality(item, 1)
                   true -> item
                 end
                 cond do
                   item.sell_in < 6 ->
-                    cond do
-                      item.quality < 50 ->
-                        %{item | quality: item.quality + 1}
-                      true -> item
-                    end
+                        change_quality(item, 1)
                   true -> item
                 end
               true -> item
@@ -48,36 +33,38 @@ defmodule GildedRose do
           true -> item
         end
     end
-    item = cond do
-      item.name != "Sulfuras, Hand of Ragnaros" ->
-        %{item | sell_in: item.sell_in - 1}
-      true -> item
-    end
+    item = change_sell_in(item, -1)
     cond do
       item.sell_in < 0 ->
         cond do
           item.name != "Aged Brie" ->
             cond do
               item.name != "Backstage passes to a TAFKAL80ETC concert" ->
-                cond do
-                  item.quality > 0 ->
-                    cond do
-                      item.name != "Sulfuras, Hand of Ragnaros" ->
-                        %{item | quality: item.quality - 1}
-                      true -> item
-                    end
-                  true -> item
-                end
-              true -> %{item | quality: item.quality - item.quality}
+                    change_quality(item, -1)
+              true -> change_quality(item, -item.quality)
             end
           true ->
-            cond do
-              item.quality < 50 ->
-                %{item | quality: item.quality + 1}
-              true -> item
-            end
+                change_quality(item, 1)
         end
       true -> item
     end
   end
+
+  defp change_sell_in(%Item{name: "Sulfuras, Hand of Ragnaros"} = item, _amount), do: item
+  defp change_sell_in(%Item{sell_in: sell_in} = item, amount) do
+    %Item{item | sell_in: sell_in + amount}
+  end
+
+  defp change_quality(%Item{name: "Sulfuras, Hand of Ragnaros"} = item, _amount), do: item
+  defp change_quality(%Item{quality: quality} = item, amount) do
+    quality =
+      quality
+      |> Kernel.+(amount)
+      |> max(0)
+      |> min(50)
+
+    %Item{item | quality: quality}
+  end
+
+
 end
