@@ -8,7 +8,7 @@ defmodule GildedRose do
   end
 
   def update_item(%{name: "Aged Brie"} = item) do
-    %{item | sell_in: item.sell_in - 1, quality: min(50, item.quality + 1)}
+    update_item_default(item, -1)
   end
 
   def update_item(%{name: "Backstage passes to a TAFKAL80ETC concert"} = item) do
@@ -28,11 +28,11 @@ defmodule GildedRose do
   end
 
   def update_item_default(%{sell_in: sell_in} = item, multi) when sell_in <= 0 do
-    %{item | quality: max(0, item.quality - 2 * multi), sell_in: item.sell_in - 1}
+    %{item | quality: max(0, item.quality - 2 * multi) |> min(50), sell_in: item.sell_in - 1}
   end
 
   def update_item_default(item, multi) do
-    %{item | quality: max(0, item.quality - 1 * multi), sell_in: item.sell_in - 1}
+    %{item | quality: max(0, item.quality - 1 * multi) |> min(50), sell_in: item.sell_in - 1}
   end
 
   def update_backstage_pass(%{sell_in: sell_in} = item) when sell_in <= 0 do
