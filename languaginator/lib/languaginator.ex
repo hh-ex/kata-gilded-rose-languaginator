@@ -1,5 +1,5 @@
 defmodule Languaginator do
-  de = %{
+  @de %{
     a: 6.51,
     b: 1.89,
     c: 3.06,
@@ -28,7 +28,7 @@ defmodule Languaginator do
     z: 1.13
   }
 
-  eng = %{
+  @eng %{
     a: 8.167,
     b: 1.492,
     c: 2.782,
@@ -57,7 +57,7 @@ defmodule Languaginator do
     z: 0.074
   }
 
-  fr = %{
+  @fr %{
     a: 7.636,
     b: 0.901,
     c: 3.260,
@@ -86,7 +86,50 @@ defmodule Languaginator do
     z: 0.136
   }
 
+  @languages %{
+    de: @de,
+    en: @eng,
+    fr: @fr
+  }
+
   def classify(input) do
-    :de
+    input = input_frequency(input)
+
+    @languages
+    |> Enum.map(fn {lang, freq} ->
+      {lang, distance(freq, input)}
+    end)
+    |> Enum.sort_by(&elem(&1, 1))
+    |> List.first()
+    |> elem(0)
+  end
+
+  def input_frequency(input) do
+    input =
+      input
+      |> String.downcase()
+      |> String.replace(~r/[^a-z]/, "")
+
+    len = String.length(input)
+
+    input
+    |> String.to_charlist()
+    |> Enum.reduce(%{}, fn letter, acc ->
+      letter = List.to_string([letter])
+      Map.update(acc, letter, 1, &(&1 + 1))
+    end)
+    |> Enum.map(fn {letter, count} -> {letter, count / len * 100} end)
+    |> Enum.into(%{})
+  end
+
+  def distance(a, b) do
+    for letter <- ?a..?z do
+      letter = List.to_string([letter])
+      freq_a = Map.get(a, String.to_atom(letter))
+      freq_b = Map.get(b, letter, 0)
+
+      :math.pow(freq_a - freq_b, 2)
+    end
+    |> Enum.sum()
   end
 end
