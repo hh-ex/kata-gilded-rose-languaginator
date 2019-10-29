@@ -22,6 +22,14 @@ defmodule GildedRose do
     %{item | sell_in: item.sell_in - 1}
   end
 
+  def update_item(%Item{name: "Aged Brie"} = item) do
+    update_brie(item)
+  end
+
+  defp update_brie(item) do
+    item |> update_quality(1) |> update_sell_in()
+  end
+
   def update_item(%Item{name: "Sulfuras, Hand of Ragnaros"} = item), do: item
 
   def update_item(%Item{name: "Conjured Item"} = item), do: update_conjured_item(item)
