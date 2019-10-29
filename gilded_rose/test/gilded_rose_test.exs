@@ -90,6 +90,7 @@ defmodule GildedRoseTest do
       test_update("Conjured Item", %{q: [10, 8], s: [1, 0]})
       test_update("Conjured Item", %{q: [10, 6], s: [0, -1]})
       test_update("Conjured Item", %{q: [10, 6], s: [-6, -7]})
+      test_update("Conjured Item", %{q: [1, 0], s: [0, -1]})
     end
   end
 end
