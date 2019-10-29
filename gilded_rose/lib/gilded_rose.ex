@@ -12,7 +12,7 @@ defmodule GildedRose do
   end
 
   def increase_quality(item, n) do
-    %{item | quality: item.quality + n}
+    %{item | quality: min(item.quality + n, 50)}
   end
 
   def decrease_sell_in(item, n) do
