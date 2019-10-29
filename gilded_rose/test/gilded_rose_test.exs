@@ -21,6 +21,20 @@ defmodule GildedRoseTest do
              ]
     end
 
+    test "some conjured item" do
+      assert GildedRose.update_quality([
+               %Item{name: "some conjured item", quality: 10, sell_in: 9}
+             ]) == [
+               %Item{name: "some conjured item", quality: 8, sell_in: 8}
+             ]
+
+      assert GildedRose.update_quality([
+               %Item{name: "some conjured item", quality: 1, sell_in: 9}
+             ]) == [
+               %Item{name: "some conjured item", quality: 0, sell_in: 8}
+             ]
+    end
+
     test "Backstage passes" do
       assert GildedRose.update_quality([
                %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 1, sell_in: 9}
@@ -67,9 +81,6 @@ defmodule GildedRoseTest do
              ]) == [
                %Item{name: "Aged Brie", quality: 50, sell_in: 8}
              ]
-    end
-
-    test "some conjured item" do
     end
   end
 end
