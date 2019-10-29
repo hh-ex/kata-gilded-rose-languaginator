@@ -2,74 +2,81 @@ defmodule GildedRoseTest do
   use ExUnit.Case
   doctest GildedRose
 
+  def test_update(name, %{q: [q1, q2], s: [s1, s2]}) do
+    assert GildedRose.update_quality([%Item{name: name, quality: q1, sell_in: s1}]) == [
+             %Item{name: name, quality: q2, sell_in: s2}
+           ]
+  end
+
   describe "update_quality" do
     test "some item" do
-      assert GildedRose.update_quality([%Item{name: "Some Item", quality: 10, sell_in: 9}]) == [
-               %Item{name: "Some Item", quality: 9, sell_in: 8}
-             ]
-
-      assert GildedRose.update_quality([%Item{name: "Some Item", quality: 10, sell_in: 1}]) == [
-               %Item{name: "Some Item", quality: 9, sell_in: 0}
-             ]
-
-      assert GildedRose.update_quality([%Item{name: "Some Item", quality: 10, sell_in: 0}]) == [
-               %Item{name: "Some Item", quality: 8, sell_in: -1}
-             ]
-
-      assert GildedRose.update_quality([%Item{name: "Some Item", quality: 0, sell_in: 0}]) == [
-               %Item{name: "Some Item", quality: 0, sell_in: -1}
-             ]
+      test_update("Some Item", %{q: [50, 49], s: [9, 8]})
+      test_update("Some Item", %{q: [11, 10], s: [11, 10]})
+      test_update("Some Item", %{q: [10, 9], s: [10, 9]})
+      test_update("Some Item", %{q: [10, 9], s: [9, 8]})
+      test_update("Some Item", %{q: [10, 9], s: [7, 6]})
+      test_update("Some Item", %{q: [10, 9], s: [6, 5]})
+      test_update("Some Item", %{q: [10, 9], s: [5, 4]})
+      test_update("Some Item", %{q: [10, 9], s: [4, 3]})
+      test_update("Some Item", %{q: [10, 9], s: [3, 2]})
+      test_update("Some Item", %{q: [10, 9], s: [2, 1]})
+      test_update("Some Item", %{q: [10, 9], s: [1, 0]})
+      test_update("Some Item", %{q: [10, 8], s: [0, -1]})
+      test_update("Some Item", %{q: [10, 8], s: [-6, -7]})
     end
 
     test "Backstage passes" do
-      assert GildedRose.update_quality([
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 1, sell_in: 9}
-             ]) == [
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 3, sell_in: 8}
-             ]
-
-      assert GildedRose.update_quality([
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 10, sell_in: 4}
-             ]) == [
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 13, sell_in: 3}
-             ]
-
-      assert GildedRose.update_quality([
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 10, sell_in: 0}
-             ]) == [
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 0, sell_in: -1}
-             ]
-
-      assert GildedRose.update_quality([
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 50, sell_in: 1}
-             ]) == [
-               %Item{name: "Backstage passes to a TAFKAL80ETC concert", quality: 50, sell_in: 0}
-             ]
+      name = "Backstage passes to a TAFKAL80ETC concert"
+      test_update(name, %{q: [50, 50], s: [9, 8]})
+      test_update(name, %{q: [11, 12], s: [11, 10]})
+      test_update(name, %{q: [10, 12], s: [10, 9]})
+      test_update(name, %{q: [10, 12], s: [9, 8]})
+      test_update(name, %{q: [10, 12], s: [7, 6]})
+      test_update(name, %{q: [10, 12], s: [6, 5]})
+      test_update(name, %{q: [10, 13], s: [5, 4]})
+      test_update(name, %{q: [10, 13], s: [4, 3]})
+      test_update(name, %{q: [10, 13], s: [3, 2]})
+      test_update(name, %{q: [10, 13], s: [2, 1]})
+      test_update(name, %{q: [10, 13], s: [1, 0]})
+      test_update(name, %{q: [10, 0], s: [0, -1]})
+      test_update(name, %{q: [10, 0], s: [-6, -7]})
     end
 
     test "Sulfuras" do
-      assert GildedRose.update_quality([
-               %Item{name: "Sulfuras, Hand of Ragnaros", quality: 80, sell_in: 9}
-             ]) == [
-               %Item{name: "Sulfuras, Hand of Ragnaros", quality: 80, sell_in: 9}
-             ]
+      name = "Sulfuras, Hand of Ragnaros"
+      test_update(name, %{q: [50, 50], s: [9, 9]})
+      test_update(name, %{q: [11, 11], s: [11, 11]})
+      test_update(name, %{q: [10, 10], s: [10, 10]})
+      test_update(name, %{q: [10, 10], s: [9, 9]})
+      test_update(name, %{q: [10, 10], s: [7, 7]})
+      test_update(name, %{q: [10, 10], s: [6, 6]})
+      test_update(name, %{q: [10, 10], s: [5, 5]})
+      test_update(name, %{q: [10, 10], s: [4, 4]})
+      test_update(name, %{q: [10, 10], s: [3, 3]})
+      test_update(name, %{q: [10, 10], s: [2, 2]})
+      test_update(name, %{q: [10, 10], s: [1, 1]})
+      test_update(name, %{q: [10, 10], s: [0, 0]})
+      test_update(name, %{q: [10, 10], s: [-6, -6]})
     end
 
     test "Aged Brie" do
-      assert GildedRose.update_quality([
-               %Item{name: "Aged Brie", quality: 38, sell_in: 9}
-             ]) == [
-               %Item{name: "Aged Brie", quality: 39, sell_in: 8}
-             ]
-
-      assert GildedRose.update_quality([
-               %Item{name: "Aged Brie", quality: 50, sell_in: 9}
-             ]) == [
-               %Item{name: "Aged Brie", quality: 50, sell_in: 8}
-             ]
+      name = "Aged Brie"
+      test_update(name, %{q: [50, 50], s: [9, 8]})
+      test_update(name, %{q: [11, 12], s: [11, 10]})
+      test_update(name, %{q: [10, 11], s: [10, 9]})
+      test_update(name, %{q: [10, 11], s: [9, 8]})
+      test_update(name, %{q: [10, 11], s: [7, 6]})
+      test_update(name, %{q: [10, 11], s: [6, 5]})
+      test_update(name, %{q: [10, 11], s: [5, 4]})
+      test_update(name, %{q: [10, 11], s: [4, 3]})
+      test_update(name, %{q: [10, 11], s: [3, 2]})
+      test_update(name, %{q: [10, 11], s: [2, 1]})
+      test_update(name, %{q: [10, 11], s: [1, 0]})
+      test_update(name, %{q: [10, 12], s: [0, -1]})
+      test_update(name, %{q: [10, 12], s: [-6, -7]})
     end
 
-    test "some conjured item" do
-    end
+    # test "some conjured item" do
+    # end
   end
 end
