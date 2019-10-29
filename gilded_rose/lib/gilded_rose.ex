@@ -12,7 +12,11 @@ defmodule GildedRose do
       item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" ->
         if item.quality > 0 do
           if item.name != "Sulfuras, Hand of Ragnaros" do
-            %{item | quality: item.quality - 1}
+            if item.name == "Conjured Item" do
+              %{item | quality: item.quality - 2}
+            else
+              %{item | quality: item.quality - 1}
+            end
           else
             item
           end
@@ -63,7 +67,11 @@ defmodule GildedRose do
                   item.quality > 0 ->
                     cond do
                       item.name != "Sulfuras, Hand of Ragnaros" ->
-                        %{item | quality: item.quality - 1}
+                        if item.name == "Conjured Item" do
+                          %{item | quality: item.quality - 2}
+                        else
+                          %{item | quality: item.quality - 1}
+                        end
                       true -> item
                     end
                   true -> item
